@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_inventory/controller/url.dart';
+import 'package:fyp_inventory/server_down.dart';
 import 'package:lottie/lottie.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
@@ -12,6 +14,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUrl();
+  }
+
+  getUrl() async {
+    await BaseUrl.get();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,10 +69,19 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  ); // Validate the form before logging in
+                  if (BaseUrl.url == "Server is down") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ServerDown()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                  }
                 },
                 child: Text(
                   'Login',

@@ -39,7 +39,9 @@ class _InventoryListPageState extends State<InventoryListPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButtonFormField<String>(
@@ -154,11 +156,11 @@ class _InventoryListPageState extends State<InventoryListPage> {
                                 content: const Text(
                                     "Are you sure you wish to delete this item?"),
                                 actions: <Widget>[
-                                  TextButton(
+                                  ElevatedButton(
                                       onPressed: () =>
                                           Navigator.of(context).pop(true),
                                       child: const Text("DELETE")),
-                                  TextButton(
+                                  ElevatedButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(false),
                                     child: const Text("CANCEL"),
@@ -203,17 +205,17 @@ class _InventoryListPageState extends State<InventoryListPage> {
                             ),
                             subtitle: Text('Item Description'),
                             trailing: GestureDetector(
-                                onTap: () {},
-                                child: SizedBox(
-                                  height:20,
-                                  width: 20,
-                                  child: Lottie.asset(
-                                      'animations/88983-edit-write-update.json',
-                                      height: 250,
-                                      repeat: true,
-                                      reverse: true,
-                                      fit: BoxFit.cover),
-                                ),
+                              onTap: () {},
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: Lottie.asset(
+                                    'animations/88983-edit-write-update.json',
+                                    height: 250,
+                                    repeat: true,
+                                    reverse: true,
+                                    fit: BoxFit.cover),
+                              ),
                             ),
                           ),
                         ),
@@ -232,11 +234,11 @@ class _InventoryListPageState extends State<InventoryListPage> {
                                 content: const Text(
                                     "Are you sure you wish to delete this item?"),
                                 actions: <Widget>[
-                                  TextButton(
+                                  ElevatedButton(
                                       onPressed: () =>
                                           Navigator.of(context).pop(true),
                                       child: const Text("DELETE")),
-                                  TextButton(
+                                  ElevatedButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(false),
                                     child: const Text("CANCEL"),
