@@ -99,63 +99,72 @@ class _AddItemTypeState extends State<AddItemType> {
                       elevation: 2,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomLeft: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          )
-                      ),
-                      child: Container(height: 38,width: 200,
+                        topLeft: Radius.circular(
+                            10.0), // Specify the desired radius for the top left corner
+                        bottomLeft: Radius.circular(
+                            10.0), // Specify the desired radius for the bottom right corner
+                        // You can adjust other corners as needed
+                      )),
+                      child: Container(
+                        height: 38,
+                        width: 200,
                         child: Center(
-                          child: Text('Add',style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.black.withOpacity(0.8)
-                          ),),
+                          child: Text(
+                            'Add',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black.withOpacity(0.8)),
+                          ),
                         ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomLeft: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
+                            topLeft: Radius.circular(
+                                10.0), // Specify the desired radius for the top left corner
+                            bottomLeft: Radius.circular(
+                                10.0), // Specify the desired radius for the bottom right corner
                             // You can adjust other corners as needed
                           ),
-                      ),
-
+                        ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       _showNotification('Supplier updated successfully');
                     },
                     child: Material(
                       elevation: 2,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomRight: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          )
-                      ),
-                      child: Container(height: 38,width: 200,
+                        topRight: Radius.circular(
+                            10.0), // Specify the desired radius for the top left corner
+                        bottomRight: Radius.circular(
+                            10.0), // Specify the desired radius for the bottom right corner
+                        // You can adjust other corners as needed
+                      )),
+                      child: Container(
+                        height: 38,
+                        width: 200,
                         child: Center(
-                          child: Text('Update',style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white
-                          ),),
+                          child: Text(
+                            'Update',
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
                         ),
                         decoration: BoxDecoration(
                           color: Color(0xFF004096).withOpacity(0.9),
                           borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomRight: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
+                            topRight: Radius.circular(
+                                10.0), // Specify the desired radius for the top left corner
+                            bottomRight: Radius.circular(
+                                10.0), // Specify the desired radius for the bottom right corner
                             // You can adjust other corners as needed
                           ),
-                      ),
-
+                        ),
                       ),
                     ),
                   ),
-
                 ],
               ),
               SizedBox(height: 20),

@@ -37,7 +37,7 @@ class _AddDataState extends State<AddData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      backgroundColor: Color(0xFF004096),
+        backgroundColor: Color(0xFF004096),
         title: Text('Add Data'),
       ),
       body: SingleChildScrollView(
@@ -48,12 +48,17 @@ class _AddDataState extends State<AddData> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   'Item Details',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Divider(thickness: 0.5,color: Color(0xFF004096),),
+                Divider(
+                  thickness: 0.5,
+                  color: Color(0xFF004096),
+                ),
                 SizedBox(height: 15),
                 TextFormField(
                   controller: _idController,
@@ -143,7 +148,7 @@ class _AddDataState extends State<AddData> {
                   'Department',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Divider(thickness: 0.5,color: Color(0xFF004096)),
+                Divider(thickness: 0.5, color: Color(0xFF004096)),
                 SizedBox(height: 15),
                 TextFormField(
                   controller: _deptController,
@@ -170,7 +175,7 @@ class _AddDataState extends State<AddData> {
                   'Seller',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Divider(thickness: 0.5,color: Color(0xFF004096)),
+                Divider(thickness: 0.5, color: Color(0xFF004096)),
                 SizedBox(height: 15),
                 TextFormField(
                   controller: _sellerIdController,
@@ -274,7 +279,7 @@ class _AddDataState extends State<AddData> {
                             title: Text('Data Submitted'),
                             content: Text('Your form data has been submitted.'),
                             actions: [
-                              TextButton(
+                              ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
