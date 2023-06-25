@@ -18,7 +18,7 @@ class BaseUrl {
   }
 }
 
-void main(List<String> args) async {
-  await BaseUrl.get();
-  print(BaseUrl.url);
-}
+//void main(List<String> args) async {
+//  await BaseUrl.get();
+//  print(BaseUrl.url);
+//}
