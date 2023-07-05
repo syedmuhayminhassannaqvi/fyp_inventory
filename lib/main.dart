@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_inventory/splashscreen.dart';
+//import 'package:fyp_inventory/splashscreen.dart';
 //import 'package:fyp_inventory/updatedata.dart';
 //import 'AddData.dart';
 //import 'Custom WIdgets/CustomDrawertile.dart';
@@ -12,14 +12,14 @@ import 'package:fyp_inventory/splashscreen.dart';
 //import 'PurchaseOrderItem/PurchaseOrderItemListView.dart';
 //import 'Supplier/AddSupplier.dart';
 //import 'Supplier/Supplier details.dart';
-//import 'Supplier/supplierlistview.dart';
+import 'Supplier/supplierlistview.dart';
 //import 'Tabviewpages/HomeDetail.dart';
 //import 'bottomnav.dart';
 //import 'dasboardview.dart';
 //import 'datadetail.dart';
 //import 'Tabviewpages/detailorderlistview.dart';
 //import 'home screen.dart';
-import 'login.dart';
+//import 'login.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -30,9 +30,9 @@ void main() {
     //home: DetailOrderListView(),
     //home: CustomListtile(),
     //home: HomeOrderDetail(),
-    home: SplashScreen(),
+    //home: SplashScreen(),
     //home: GatePassListview(),
-    //home: Supplierlistview(),
+    home: Supplierlistview(),
     //home: AddSupplierPage(),
     //home: PurchaseOrderItemListView(),
 
