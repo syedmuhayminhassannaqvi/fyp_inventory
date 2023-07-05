@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_inventory/controller/supplierController.dart';
+import 'package:fyp_inventory/models/supplier.dart';
 
 import 'AddSupplier.dart';
 import 'Supplier details.dart';
@@ -32,11 +34,23 @@ class _SupplierlistviewState extends State<Supplierlistview> {
   ];
 
   List<String> filteredItems = [];
+  List<Supplier>? data;
+  var isLoaded = false;
 
   @override
   void initState() {
     filteredItems = items;
     super.initState();
+    getData();
+  }
+
+  getData() async{
+    data = await SupplierController().readAll();
+    if(data != null) {
+      setState(() {
+        isLoaded = true;
+      });
+    }
   }
 
   void filterList(String query) {
@@ -60,88 +74,94 @@ class _SupplierlistviewState extends State<Supplierlistview> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: TextField(
-                onChanged: filterList,
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+        child: Visibility(
+          visible: isLoaded,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: TextField(
+                  onChanged: filterList,
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredItems.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 3,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SupplierDetial()),
-                        );
-                      },
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 55,
-                            color: Colors.white,
-                          ),
-                          Positioned(
-                            top: 9,
-                            child: Container(
-                              width: 2,
-                              height: 37,
-                              color: Color(0xFF004096).withOpacity(0.9),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: data?.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 3,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SupplierDetial()),
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 55,
+                              color: Colors.white,
                             ),
-                          ),
-                          Positioned(
-                            top: 13,
-                            left: 20,
-                            child: Text(
-                              filteredItems[index],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                            Positioned(
+                              top: 9,
+                              child: Container(
+                                width: 2,
+                                height: 37,
+                                color: Color(0xFF004096).withOpacity(0.9),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            top: 30,
-                            left: 20,
-                            child: Text(
-                              'SKU883995',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ),
-                          Positioned(
-                            top: 16,
-                            left: 370,
-                            child: Text(
-                              '88840',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF004096),
-                                fontSize: 13,
+                            Positioned(
+                              top: 13,
+                              left: 20,
+                              child: Text(
+                                data![index].suName,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                            Positioned(
+                              top: 30,
+                              left: 20,
+                              child: Text(
+                                data![index].suPhone,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            Positioned(
+                              top: 16,
+                              left: 370,
+                              child: Text(
+                                '88840',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF004096),
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
+          replacement: Center(
+            child: CircularProgressIndicator(),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

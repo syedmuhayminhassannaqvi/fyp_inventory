@@ -56,7 +56,7 @@ class SupplierController {
     }
   }
 
-  static Future<List<Supplier>?> readAll() async {
+  Future<List<Supplier>?> readAll() async {
     var url = Uri.parse(await BaseUrl.get() + "/api/v1/supplier/all/");
 
     var req = http.Request("GET", url);
@@ -67,13 +67,11 @@ class SupplierController {
 
     if (res.statusCode >= 200 && res.statusCode < 300) {
       return supplierFromJsonList(resBody);
-    } else {
-      //return res.reasonPhrase;
     }
   }
 }
 
 void main(List<String> args) async {
-  var re = await SupplierController.readAll();
-  print(re![0].suName);
+  var re = await SupplierController.add("ggggg", "03177474409", "", "");
+  print(re);
 }
