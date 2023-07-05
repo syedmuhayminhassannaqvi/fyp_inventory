@@ -40,7 +40,7 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
           _phoneController.text,
           _emailController.text,
           _addressController.text);
-      _showNotification(res);
+      _showNotification(res.toString());
       _formKey.currentState!.reset();
     }
   }
@@ -53,7 +53,7 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
           _phoneController.text,
           _emailController.text,
           _addressController.text);
-      _showNotification(res);
+      _showNotification(res.toString());
       _formKey.currentState!.reset();
     }
   }
