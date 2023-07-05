@@ -13,8 +13,8 @@ String supplierListToJson(List<Supplier> data) =>
 class Supplier {
   String suName;
   String suPhone;
-  String? suEmail;
-  String? suAddress;
+  String? suEmail = "";
+  String? suAddress = "";
 
   Supplier({
     required this.suName,
