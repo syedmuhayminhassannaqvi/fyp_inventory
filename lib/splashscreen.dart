@@ -14,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   @override
   void initState() {
     // TODO: implement initState
@@ -69,17 +70,17 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  if (BaseUrl.url == "Server is down") {
+                  if (identical(BaseUrl.url, "Server is down")) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ServerDown()),
+                          builder: (context) =>  ServerDown()),
                     );
                   } else {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
+                          builder: (context) =>  LoginPage()),
                     );
                   }
                 },
