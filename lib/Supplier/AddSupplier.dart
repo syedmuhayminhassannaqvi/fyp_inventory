@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_inventory/controller/supplierController.dart';
 
 class AddSupplierPage extends StatefulWidget {
+  final int op;
+
+  AddSupplierPage(this.op, {super.key});
+
   @override
-  _AddSupplierPageState createState() => _AddSupplierPageState();
+  _AddSupplierPageState createState() => _AddSupplierPageState(op);
 }
 
 class _AddSupplierPageState extends State<AddSupplierPage> {
@@ -11,6 +16,9 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final int op;
+
+  _AddSupplierPageState(this.op);
 
   String? _notification;
 
@@ -25,11 +33,27 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
     });
   }
 
-  void _submitForm() {
+  void _addData() async {
     if (_formKey.currentState!.validate()) {
-      // Perform the submit action
-      // Here, you can save the supplier details or perform any other actions
-      _showNotification('Supplier added successfully');
+      var res = await SupplierController.add(
+          _nameController.text,
+          _phoneController.text,
+          _emailController.text,
+          _addressController.text);
+      _showNotification(res);
+      _formKey.currentState!.reset();
+    }
+  }
+
+  void _updateData() async {
+    if (_formKey.currentState!.validate()) {
+      var res = await SupplierController.update(
+          "1",
+          _nameController.text,
+          _phoneController.text,
+          _emailController.text,
+          _addressController.text);
+      _showNotification(res);
       _formKey.currentState!.reset();
     }
   }
@@ -49,7 +73,7 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFF004096).withOpacity(0.9),
         centerTitle: true,
-        title: Text('Add Supplier'),
+        title: Text((op == 0) ? 'Add Supplier' : 'Update Supplier'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -82,12 +106,6 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an email';
-                  }
-                  return null;
-                },
               ),
               SizedBox(height: 10),
               TextFormField(
@@ -115,80 +133,31 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an address';
-                  }
-                  return null;
-                },
               ),
               SizedBox(height: 20),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: _submitForm,
-                    child: Material(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomLeft: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          )
+              GestureDetector(
+                onTap: (op == 0) ? _addData : _updateData,
+                child: Material(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  child: Container(
+                    height: 38,
+                    width: 200,
+                    child: Center(
+                      child: Text(
+                        (op == 0) ? 'Add' : 'Update',
+                        style: TextStyle(fontSize: 14, color: Colors.white),
                       ),
-                      child: Container(height: 38,width: 200,
-                        child: Center(
-                          child: Text('Add',style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.black.withOpacity(0.8)
-                          ),),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomLeft: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          ),
-                      ),
-
+                    ),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF004096).withOpacity(0.9),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: (){
-                      _showNotification('Supplier updated successfully');
-                    },
-                    child: Material(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomRight: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          )
-                      ),
-                      child: Container(height: 38,width: 200,
-                        child: Center(
-                          child: Text('Update',style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white
-                          ),),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF004096).withOpacity(0.9),
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomRight: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          ),
-                      ),
-
-                      ),
-                    ),
-                  ),
-
-                ],
+                ),
               ),
               SizedBox(height: 20),
               if (_notification != null)

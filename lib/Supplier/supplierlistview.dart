@@ -42,8 +42,7 @@ class _SupplierlistviewState extends State<Supplierlistview> {
   void filterList(String query) {
     setState(() {
       filteredItems = items
-          .where((item) =>
-          item.toLowerCase().contains(query.toLowerCase()))
+          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -54,16 +53,17 @@ class _SupplierlistviewState extends State<Supplierlistview> {
       appBar: AppBar(
         backgroundColor: Color(0xFF004096).withOpacity(0.9),
         centerTitle: true,
-        title: Text('Supplier',style: TextStyle(
-
-        ),),
+        title: Text(
+          'Supplier',
+          style: TextStyle(),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             Padding(
-              padding:  EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 10),
               child: TextField(
                 onChanged: filterList,
                 decoration: InputDecoration(
@@ -81,12 +81,12 @@ class _SupplierlistviewState extends State<Supplierlistview> {
                   return Card(
                     elevation: 3,
                     child: GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>  SupplierDetial()),
+                          MaterialPageRoute(
+                              builder: (context) => SupplierDetial()),
                         );
-
                       },
                       child: Stack(
                         children: [
@@ -150,10 +150,10 @@ class _SupplierlistviewState extends State<Supplierlistview> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  AddSupplierPage()),
+            MaterialPageRoute(builder: (context) => AddSupplierPage(0)),
           );
-
-        },),
+        },
+      ),
     );
   }
 }

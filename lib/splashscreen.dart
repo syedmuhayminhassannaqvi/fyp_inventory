@@ -69,17 +69,15 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  if (BaseUrl.url == "Server is down") {
+                  if (BaseUrl.url != "Server is down") {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const ServerDown()),
+                      MaterialPageRoute(builder: (context) => ServerDown()),
                     );
                   } else {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
+                      MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   }
                 },
