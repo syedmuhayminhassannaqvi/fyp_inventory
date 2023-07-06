@@ -14,6 +14,8 @@ class BaseUrl {
 
     if (res.statusCode >= 200 && res.statusCode < 300) {
       return jsonDecode(resBody);
+    } else {
+      return "Server is down";
     }
   }
 }

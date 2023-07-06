@@ -38,8 +38,12 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
       var res = await SupplierController.add(
           _nameController.text,
           _phoneController.text,
-          _emailController.text,
-          _addressController.text);
+          _emailController.text.trim().isEmpty
+              ? null
+              : _emailController.text.trim(),
+          _addressController.text.trim().isEmpty
+              ? null
+              : _addressController.text.trim());
       _showNotification(res.toString());
       _formKey.currentState!.reset();
     }
