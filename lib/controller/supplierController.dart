@@ -7,7 +7,7 @@ import 'package:fyp_inventory/models/supplier.dart';
 
 class SupplierController {
   static var prefs = BaseController.getPrefs();
-  static var baseUrl = "${prefs.getString("baseUrl")}supplier/";
+  static var baseUrl = "${prefs.getString("baseUrl")}/api/v1/supplier/";
   static var headers = {
     'Accept': '*/*',
     'Authorization': prefs.getString("token").toString(),
@@ -32,12 +32,15 @@ class SupplierController {
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
 
-    if (res.statusCode >= 200 && res.statusCode < 300) {
-      return jsonDecode(resBody)["message"];
+    if (res.statusCode == 201) {
+      return {"statusCode": 201, "detail": jsonDecode(resBody)["detail"]};
     } else if (res.statusCode == 422) {
-      return jsonDecode(resBody)["detail"][0]["msg"];
+      return {
+        "statusCode": 422,
+        "detail": jsonDecode(resBody)["detail"][0]["msg"]
+      };
     } else {
-      return jsonDecode(resBody)["detail"];
+      return {"statusCode": 409, "detail": jsonDecode(resBody)["detail"]};
     }
   }
 
@@ -68,7 +71,7 @@ class SupplierController {
     }
   }
 
-  Future<List<Supplier>?> readAll() async {
+  Future<List<Supplier>> readAll() async {
     var url = Uri.parse("${baseUrl}all/");
 
     var req = http.Request("GET", url);
@@ -78,11 +81,9 @@ class SupplierController {
     final resBody = await res.stream.bytesToString();
 
     if (res.statusCode >= 200 && res.statusCode < 300) {
-      return jsonDecode(resBody)["message"];
-    } else if (res.statusCode == 422) {
-      return jsonDecode(resBody)["detail"][0]["msg"];
+      return supplierFromJsonList(resBody);
     } else {
-      return jsonDecode(resBody)["detail"];
+      return <Supplier>[];
     }
   }
 }

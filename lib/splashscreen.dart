@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_inventory/navigation_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-
-import 'login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,6 +13,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
+    NavigationService service = NavigationService();
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -56,10 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
+                  service.routeTo("login");
                 },
                 child: Text(
                   'Login',

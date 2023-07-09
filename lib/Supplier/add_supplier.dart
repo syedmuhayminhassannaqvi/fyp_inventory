@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_inventory/controller/supplierController.dart';
+import 'package:fyp_inventory/navigation_service.dart';
 
 class AddSupplierPage extends StatefulWidget {
   final int op;
@@ -11,16 +12,27 @@ class AddSupplierPage extends StatefulWidget {
 }
 
 class _AddSupplierPageState extends State<AddSupplierPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static var _formKey;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final int op;
 
+  bool _nameError = false;
+
+  var errorText;
+
   _AddSupplierPageState(this.op);
 
   String? _notification;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _formKey = GlobalKey<FormState>();
+  }
 
   void _showNotification(String message) {
     setState(() {
@@ -33,7 +45,7 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
     });
   }
 
-  void _addData() async {
+  _add() async {
     if (_formKey.currentState!.validate()) {
       var res = await SupplierController.add(
           _nameController.text,
@@ -44,12 +56,22 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
           _addressController.text.trim().isEmpty
               ? null
               : _addressController.text.trim());
-      _showNotification(res.toString());
-      _formKey.currentState!.reset();
+
+      if (res["statusCode"] == 201) {
+        _formKey.currentState!.reset();
+        NavigationService().routeTo("supplier");
+      } else if (res["statusCode"] == 422) {
+        _showNotification(res["detail"]);
+      } else {
+        setState(() {
+          errorText = res["detail"];
+          _nameError = true;
+        });
+      }
     }
   }
 
-  void _updateData() async {
+  _update() async {
     if (_formKey.currentState!.validate()) {
       var res = await SupplierController.update(
           "1",
@@ -59,6 +81,7 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
           _addressController.text);
       _showNotification(res.toString());
       _formKey.currentState!.reset();
+      NavigationService().goBack();
     }
   }
 
@@ -75,7 +98,7 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF004096).withOpacity(0.9),
+        backgroundColor: const Color(0xFF004096).withOpacity(0.9),
         centerTitle: true,
         title: Text((op == 0) ? 'Add Supplier' : 'Update Supplier'),
       ),
@@ -91,6 +114,7 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
                   controller: _nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
+                    errorText: _nameError ? errorText : null,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -141,7 +165,9 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
                 ),
                 SizedBox(height: 20),
                 GestureDetector(
-                  onTap: (op == 0) ? _addData : _updateData,
+                  onTap: () {
+                    (op == 0) ? _add() : _update();
+                  },
                   child: Material(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -169,7 +195,7 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
                   Text(
                     _notification!,
                     style: TextStyle(
-                      color: Colors.green,
+                      color: Colors.red,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
