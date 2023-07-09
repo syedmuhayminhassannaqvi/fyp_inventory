@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import 'datadetail.dart';
-import 'login.dart';
+import 'login_page.dart';
 
 class InventoryListPage extends StatefulWidget {
   @override

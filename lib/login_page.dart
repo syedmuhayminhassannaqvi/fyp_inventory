@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_inventory/controller/loginController.dart';
+import 'package:fyp_inventory/navigation_service.dart';
 import 'package:lottie/lottie.dart';
-
-import 'home screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -22,6 +20,10 @@ class _LoginPageState extends State<LoginPage> {
 
   // Variable to track if the password is obscured or not
   bool _isPasswordObscured = true;
+  bool _userError = false;
+  bool _passwordError = false;
+
+  var errorText;
 
   _login() async {
     // Validate the form before logging in
@@ -30,15 +32,20 @@ class _LoginPageState extends State<LoginPage> {
       var res = await LoginController.login(
           _emailPhoneController.text, _passwordController.text);
 
-      if (res == 200) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      } else if (res == 404) {
+      if (res["statusCode"] == 200) {
+        NavigationService().routeTo("homescreen");
+      } else if (res["statusCode"] == 404) {
         //User Not Found
+        setState(() {
+          errorText = res["detail"];
+          _userError = true;
+        });
       } else {
         //Incorrect Password
+        setState(() {
+          errorText = res["detail"];
+          _passwordError = true;
+        });
       }
     }
   }
@@ -47,19 +54,19 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFffffff),
-        body: SingleChildScrollView(
-          child: Column(children: [
-            Lottie.asset('animations/38435-register.json',
-                height: 300, repeat: true, reverse: true, fit: BoxFit.cover),
-            Container(
-              height: 370,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                ),
-                color: Color(0xFFE8E8E8).withOpacity(0.5),
+        body: Column(children: [
+          Lottie.asset('animations/38435-register.json',
+              height: 300, repeat: true, reverse: true, fit: BoxFit.cover),
+          Container(
+            height: 370,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
               ),
+              color: Color(0xFFE8E8E8).withOpacity(0.5),
+            ),
+            child: SingleChildScrollView(
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 50, vertical: 40),
@@ -77,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                               controller: _emailPhoneController,
                               decoration: InputDecoration(
                                 hintText: 'Email or Phone Number',
+                                errorText: _userError ? errorText : null,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide:
@@ -88,6 +96,11 @@ class _LoginPageState extends State<LoginPage> {
                                       BorderSide(color: Color(0xFF004096)),
                                 ),
                               ),
+                              onChanged: (value) {
+                                setState(() {
+                                  _userError = false;
+                                });
+                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter your email or phone number';
@@ -100,7 +113,6 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             ),
                           ),
-
                           // Password text form field
                           Padding(
                             padding: EdgeInsets.symmetric(
@@ -110,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                               obscureText: _isPasswordObscured,
                               decoration: InputDecoration(
                                 hintText: 'Password',
+                                errorText: _passwordError ? errorText : null,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide:
@@ -135,6 +148,11 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 ),
                               ),
+                              onChanged: (value) {
+                                setState(() {
+                                  _passwordError = false;
+                                });
+                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter your password';
@@ -184,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-          ]),
-        ));
+          ),
+        ]));
   }
 }

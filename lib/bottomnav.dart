@@ -4,7 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'AddData.dart';
 import 'dasboardview.dart';
 import 'datadetail.dart';
-import 'login.dart';
+import 'login_page.dart';
 
 class BottomNav extends StatefulWidget {
   @override
@@ -17,7 +17,6 @@ class _BottomNavState extends State<BottomNav> {
     'SKU 1',
     'SKU 2',
     'SKU 3',
-
   ];
 
   // Define the currently selected dropdown item
@@ -49,6 +48,7 @@ class _BottomNavState extends State<BottomNav> {
       _selectedIndex = index;
     });
   }
+
   final tabs = [
     InventoryListPage(),
     InventoryListPage(),
@@ -106,11 +106,10 @@ class _BottomNavState extends State<BottomNav> {
       body: _screens[_currentIndex],
     );
   }
+
   void _changeScreen(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
-
 }
-

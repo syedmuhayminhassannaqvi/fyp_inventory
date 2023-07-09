@@ -6,12 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController {
   static var prefs = BaseController.getPrefs();
-  static var baseUrl = "${prefs.getString("baseUrl")}login/token";
+  static var baseUrl = "${prefs.getString("baseUrl")}/api/v1/login/token";
 
   static Future<dynamic> login(String username, String password) async {
     var url = Uri.parse(baseUrl);
-
-    var body = {'username': username, 'password': password};
+    var body = {'username': username.trim(), 'password': password.trim()};
 
     var req = http.MultipartRequest("POST", url);
     req.headers.addAll({'Accept': '*/*', 'Content-Type': 'application/json'});
@@ -20,17 +19,17 @@ class LoginController {
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
 
-    if (res.statusCode >= 200 && res.statusCode < 300) {
+    if (res.statusCode == 200) {
       prefs.setString(
           "token",
           (jsonDecode(resBody)["token_type"] +
               " " +
               jsonDecode(resBody)["access_token"]));
-      return 200;
+      return {"statusCode": 200, "detail": "Sucessfull Login!"};
     } else if (res.statusCode == 404) {
-      return 404;
+      return {"statusCode": 404, "detail": jsonDecode(resBody)["detail"]};
     } else {
-      return 400;
+      return {"statusCode": 400, "detail": jsonDecode(resBody)["detail"]};
     }
   }
 }

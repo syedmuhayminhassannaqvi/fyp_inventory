@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'AddSupplier.dart';
+import 'add_supplier.dart';
 
 class SupplierDetial extends StatelessWidget {
   const SupplierDetial({Key? key}) : super(key: key);

@@ -12,14 +12,18 @@ class BaseUrl {
     var res = await req.send();
     final resBody = await res.stream.bytesToString();
 
-    if (res.statusCode >= 200 && res.statusCode < 300) {
+    if (res.statusCode == 200) {
       return jsonDecode(resBody);
     } else {
-      return "Server is down";
+      throw Exception(jsonDecode(resBody));
     }
   }
 }
 
 void main(List<String> args) async {
-  print(await BaseUrl.get());
+  try {
+    print(await BaseUrl.get());
+  } catch (e) {
+    print(e);
+  }
 }
