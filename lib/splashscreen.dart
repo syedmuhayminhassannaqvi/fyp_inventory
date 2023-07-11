@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: 60,
+                height: 70,
               ),
               Center(
                 child: Lottie.asset(

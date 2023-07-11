@@ -5,7 +5,10 @@ import 'package:fyp_inventory/navigation_service.dart';
 import 'package:fyp_inventory/route_generator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<String> initRoute(bool serverDown, var prefs) async {
+import 'UsersDetail/AddUser.dart';
+import 'UsersDetail/UsersListview.dart';
+
+/*Future<String> initRoute(bool serverDown, var prefs) async {
   if (serverDown) {
     return 'serverdown';
   } else {
@@ -54,4 +57,13 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: NavigationService.navigatorKey,
     );
   }
+}
+*/
+
+
+
+void main(){
+  runApp(MaterialApp(
+    home: UserDetail(),
+  ));
 }
