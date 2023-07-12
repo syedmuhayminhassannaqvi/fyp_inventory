@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_inventory/navigation_service.dart';
 import 'package:lottie/lottie.dart';
 import 'Custom WIdgets/CustomDrawertile.dart';
 import 'Custom WIdgets/IconContainer.dart';
@@ -8,7 +9,6 @@ import 'Item_Type/ItemTypeListView.dart';
 import 'Item_Unit/ItemUnitListView.dart';
 import 'PurchaseOrder/PurchaseOrderListView.dart';
 import 'PurchaseOrderItem/PurchaseOrderItemListView.dart';
-import 'Supplier/supplierlistview.dart';
 import 'Tabviewpages/detailorderlistview.dart';
 import 'login_page.dart';
 
@@ -61,10 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Supplierlistview()),
-                  );
+                  NavigationService().routeTo("supplier");
                 },
                 child: CustomDrawerTile(title: 'Supplier')),
             GestureDetector(

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_inventory/controller/supplierController.dart';
+import 'package:fyp_inventory/models/supplier.dart';
 import 'package:fyp_inventory/navigation_service.dart';
 
 class AddSupplierPage extends StatefulWidget {
   final int op;
+  final SupplierAdd? supplierAdd;
+  final int? id;
 
-  AddSupplierPage(this.op, {super.key});
+  AddSupplierPage(this.op, {super.key, this.supplierAdd, this.id});
 
   @override
-  _AddSupplierPageState createState() => _AddSupplierPageState(op);
+  _AddSupplierPageState createState() =>
+      _AddSupplierPageState(op, supplierAdd, id);
 }
 
 class _AddSupplierPageState extends State<AddSupplierPage> {
@@ -18,12 +22,15 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final int op;
+  int? id;
+
+  SupplierAdd? supplierAdd;
 
   bool _nameError = false;
 
   var errorText;
 
-  _AddSupplierPageState(this.op);
+  _AddSupplierPageState(this.op, this.supplierAdd, this.id);
 
   String? _notification;
 
@@ -32,6 +39,12 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
     // TODO: implement initState
     super.initState();
     _formKey = GlobalKey<FormState>();
+    if (supplierAdd != null) {
+      _nameController.text = supplierAdd!.suName;
+      _emailController.text = supplierAdd!.suEmail ?? "";
+      _addressController.text = supplierAdd!.suAddress ?? "";
+      _phoneController.text = supplierAdd!.suPhone;
+    }
   }
 
   void _showNotification(String message) {
@@ -45,8 +58,27 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
     });
   }
 
+  _show(String message) {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+              title:
+                  op == 0 ? Text("Supplier Added") : Text("Supplier Updated"),
+              content: Text(message),
+              actions: [
+                ElevatedButton(
+                    onPressed: () => NavigationService().routeTo(
+                        op == 0 ? "supplier" : "supplierdetail",
+                        args: id),
+                    child: Text("ok"))
+              ],
+            ));
+  }
+
   _add() async {
     if (_formKey.currentState!.validate()) {
+      // api call
       var res = await SupplierController.add(
           _nameController.text,
           _phoneController.text,
@@ -59,9 +91,11 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
 
       if (res["statusCode"] == 201) {
         _formKey.currentState!.reset();
-        NavigationService().routeTo("supplier");
+        _show(res["detail"]);
       } else if (res["statusCode"] == 422) {
         _showNotification(res["detail"]);
+      } else if (res["statusCode"] == 401) {
+        NavigationService().routeTo("", args: res["detail"]);
       } else {
         setState(() {
           errorText = res["detail"];
@@ -73,15 +107,31 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
 
   _update() async {
     if (_formKey.currentState!.validate()) {
+      // api call
       var res = await SupplierController.update(
-          "1",
+          id.toString(),
           _nameController.text,
           _phoneController.text,
-          _emailController.text,
-          _addressController.text);
-      _showNotification(res.toString());
-      _formKey.currentState!.reset();
-      NavigationService().goBack();
+          _emailController.text.trim().isEmpty
+              ? null
+              : _emailController.text.trim(),
+          _addressController.text.trim().isEmpty
+              ? null
+              : _addressController.text.trim());
+
+      if (res["statusCode"] == 200) {
+        _formKey.currentState!.reset();
+        _show(res["detail"]);
+      } else if (res["statusCode"] == 422) {
+        _showNotification(res["detail"]);
+      } else if (res["statusCode"] == 401) {
+        NavigationService().routeTo("", args: res["detail"]);
+      } else {
+        setState(() {
+          errorText = res["detail"];
+          _nameError = true;
+        });
+      }
     }
   }
 
@@ -166,7 +216,11 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
                 SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                    (op == 0) ? _add() : _update();
+                    if (op == 0) {
+                      _add();
+                    } else {
+                      _update();
+                    }
                   },
                   child: Material(
                     elevation: 2,
