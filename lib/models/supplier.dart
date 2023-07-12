@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-Supplier supplierFromJson(String str) => Supplier.fromJson(json.decode(str));
+SupplierAdd supplierAddFromJson(String str) =>
+    SupplierAdd.fromJson(json.decode(str));
 
-String supplierToJson(Supplier data) => json.encode(data.toJson());
+String supplierAddToJson(SupplierAdd data) => json.encode(data.toJson());
 
 List<Supplier> supplierFromJsonList(String str) =>
     List<Supplier>.from(json.decode(str).map((x) => Supplier.fromJson(x)));
@@ -11,19 +12,43 @@ String supplierListToJson(List<Supplier> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Supplier {
+  int id;
+  String suName;
+  String suPhone;
+
+  Supplier({
+    required this.id,
+    required this.suName,
+    required this.suPhone,
+  });
+
+  factory Supplier.fromJson(Map<String, dynamic> json) => Supplier(
+        id: json['id'],
+        suName: json["su_name"],
+        suPhone: json["su_phone"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "su_name": suName,
+        "su_phone": suPhone,
+      };
+}
+
+class SupplierAdd {
   String suName;
   String suPhone;
   String? suEmail = "";
   String? suAddress = "";
 
-  Supplier({
+  SupplierAdd({
     required this.suName,
     required this.suPhone,
     this.suEmail,
     this.suAddress,
   });
 
-  factory Supplier.fromJson(Map<String, dynamic> json) => Supplier(
+  factory SupplierAdd.fromJson(Map<String, dynamic> json) => SupplierAdd(
         suName: json["su_name"],
         suPhone: json["su_phone"],
         suEmail: json["su_email"],
