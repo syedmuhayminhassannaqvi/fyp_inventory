@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_inventory/Item_Categories/ItemCategoiresListView.dart';
+import 'package:fyp_inventory/PurchaseOrder/PurchaseOrderListView.dart';
+import 'package:fyp_inventory/Supplier/supplierlistview.dart';
 import 'package:fyp_inventory/controller/baseController.dart';
 import 'package:fyp_inventory/controller/url.dart';
 import 'package:fyp_inventory/navigation_service.dart';
@@ -6,9 +9,12 @@ import 'package:fyp_inventory/route_generator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'UsersDetail/AddUser.dart';
+import 'home_screen.dart';
+
+import 'UsersDetail/AddUser.dart';
 import 'UsersDetail/UsersListview.dart';
 
-/*Future<String> initRoute(bool serverDown, var prefs) async {
+Future<String> initRoute(bool serverDown, var prefs) async {
   if (serverDown) {
     return 'serverdown';
   } else {
@@ -58,12 +64,12 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-*/
 
 
 
-void main(){
-  runApp(MaterialApp(
-    home: UserDetail(),
-  ));
-}
+
+// void main(){
+//   runApp(MaterialApp(
+//     home: PurchaseOrderListView(),
+//   ));
+// }
