@@ -8,12 +8,15 @@ import 'package:fyp_inventory/navigation_service.dart';
 import 'package:fyp_inventory/route_generator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+<<<<<<< HEAD
+=======
 import 'UsersDetail/AddUser.dart';
 import 'home_screen.dart';
 
 import 'UsersDetail/AddUser.dart';
 import 'UsersDetail/UsersListview.dart';
 
+>>>>>>> 52127dd101371c69da7aca0d99151d422f39ac6f
 Future<String> initRoute(bool serverDown, var prefs) async {
   if (serverDown) {
     return 'serverdown';
@@ -64,6 +67,8 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+<<<<<<< HEAD
+=======
 
 
 
@@ -73,3 +78,4 @@ class _MyAppState extends State<MyApp> {
 //     home: PurchaseOrderListView(),
 //   ));
 // }
+>>>>>>> 52127dd101371c69da7aca0d99151d422f39ac6f
