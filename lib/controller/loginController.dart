@@ -28,6 +28,8 @@ class LoginController {
       return {"statusCode": 200, "detail": "Sucessfull Login!"};
     } else if (res.statusCode == 404) {
       return {"statusCode": 404, "detail": jsonDecode(resBody)["detail"]};
+    } else if (res.statusCode == 401) {
+      return {"statusCode": 401, "detail": jsonDecode(resBody)["detail"]};
     } else {
       return {"statusCode": 400, "detail": jsonDecode(resBody)["detail"]};
     }
