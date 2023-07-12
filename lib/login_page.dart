@@ -40,8 +40,6 @@ class _LoginPageState extends State<LoginPage> {
           errorText = res["detail"];
           _userError = true;
         });
-      } else if (res["statusCode"] == 401) {
-        NavigationService().routeTo("serverdown");
       } else {
         //Incorrect Password
         setState(() {
