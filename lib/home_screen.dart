@@ -48,8 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Visibility(
         visible: (isLoaded != 0),
-        replacement: Center(
-          child: CircularProgressIndicator(),
+        replacement: Material(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
         ),
         child: Scaffold(
           drawer: Drawer(
