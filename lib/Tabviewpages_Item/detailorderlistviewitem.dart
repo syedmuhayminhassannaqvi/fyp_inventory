@@ -1,24 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'HomeDetail.dart';
-import 'HomeDetail2.dart';
-import 'HomeDetail3.dart';
+import 'HomeDetailItem.dart';
+import 'HomeDetailItem2.dart';
 
-class DetailOrderListView extends StatefulWidget {
-  DetailOrderListView(this.index, {Key? key}) : super(key: key);
+class DetailOrderListViewItem extends StatefulWidget {
+  DetailOrderListViewItem(this.index, {Key? key}) : super(key: key);
 
   int index;
 
   @override
-  State<DetailOrderListView> createState() => _DetailOrderListViewState();
+  State<DetailOrderListViewItem> createState() =>
+      _DetailOrderListViewItemState();
 }
 
-class _DetailOrderListViewState extends State<DetailOrderListView> {
+class _DetailOrderListViewItemState extends State<DetailOrderListViewItem> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       initialIndex: widget.index,
       child: Scaffold(
         appBar: AppBar(
@@ -30,16 +30,14 @@ class _DetailOrderListViewState extends State<DetailOrderListView> {
             tabs: [
               Tab(icon: Icon(Icons.pending_actions_rounded)),
               Tab(icon: Icon(Icons.done)),
-              Tab(icon: Icon(Icons.delete_forever_outlined)),
             ],
           ),
-          title: Text('Puschase Orders'),
+          title: Text('Current Puschase Orders Items'),
         ),
         body: TabBarView(
           children: [
-            HomeOrderDetail(),
-            HomeOrderDetail2(),
-            HomeOrderDetail3(),
+            HomeOrderDetailItem(),
+            HomeOrderDetailItem2(),
           ],
         ),
       ),

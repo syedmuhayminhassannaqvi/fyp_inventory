@@ -44,6 +44,7 @@ dependencies:
   flutter_datetime_picker:
   http: ^1.0.0
   shared_preferences: 
+  hawk_fab_menu: ^1.2.0
 
 dev_dependencies:
   flutter_test:
