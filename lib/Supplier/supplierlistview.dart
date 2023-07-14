@@ -177,8 +177,8 @@ class _SupplierlistviewState extends State<Supplierlistview> {
                                     ),
                                   ),
                                   Positioned(
-                                      top: 16,
-                                      left: 370,
+                                      top: 12,
+                                      left: 300,
                                       child: IconButton.filled(
                                           onPressed: () => _delete(index),
                                           icon: Icon(

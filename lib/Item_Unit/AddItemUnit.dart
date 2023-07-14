@@ -1,18 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_inventory/controller/itemUnitController.dart';
+import 'package:fyp_inventory/models/item_unit.dart';
+import 'package:fyp_inventory/navigation_service.dart';
 
-class AddUnitType extends StatefulWidget {
+class AddItemUnit extends StatefulWidget {
+  final int op;
+  final ItemUnitAdd? itemUnitAdd;
+  final int? id;
+
+  AddItemUnit(this.op, {super.key, this.itemUnitAdd, this.id});
+
   @override
-  _AddUnitTypeState createState() => _AddUnitTypeState();
+  _AddItemUnitState createState() => _AddItemUnitState(op, itemUnitAdd, id);
 }
 
-class _AddUnitTypeState extends State<AddUnitType> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
+class _AddItemUnitState extends State<AddItemUnit> {
+  static var _formKey;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final int op;
+  int? id;
+
+  ItemUnitAdd? itemUnitAdd;
+
+  bool _titleError = false;
+
+  var errorText;
+
+  _AddItemUnitState(this.op, this.itemUnitAdd, this.id);
 
   String? _notification;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _formKey = GlobalKey<FormState>();
+    if (itemUnitAdd != null) {
+      _titleController.text = itemUnitAdd!.iuTitle;
+      _descriptionController.text = itemUnitAdd!.iuDescription ?? "";
+    }
+  }
 
   void _showNotification(String message) {
     setState(() {
@@ -25,21 +53,79 @@ class _AddUnitTypeState extends State<AddUnitType> {
     });
   }
 
-  void _submitForm() {
+  _show(String message) {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+              title:
+                  op == 0 ? Text("Item Unit Added") : Text("Item Unit Updated"),
+              content: Text(message),
+              actions: [
+                ElevatedButton(
+                    onPressed: () => NavigationService().routeTo(
+                        op == 0 ? "itemunit" : "itemunitdetail",
+                        args: id),
+                    child: Text("ok"))
+              ],
+            ));
+  }
+
+  _add() async {
     if (_formKey.currentState!.validate()) {
-      // Perform the submit action
-      // Here, you can save the supplier details or perform any other actions
-      _showNotification('Supplier added successfully');
-      _formKey.currentState!.reset();
+      // api call
+      var res = await ItemUnitController.add(
+          _titleController.text,
+          _descriptionController.text.trim().isEmpty
+              ? null
+              : _descriptionController.text.trim());
+
+      if (res["statusCode"] == 201) {
+        _formKey.currentState!.reset();
+        _show(res["detail"]);
+      } else if (res["statusCode"] == 422) {
+        _showNotification(res["detail"]);
+      } else if (res["statusCode"] == 401) {
+        NavigationService().routeTo("", args: res["detail"]);
+      } else {
+        setState(() {
+          errorText = res["detail"];
+          _titleError = true;
+        });
+      }
+    }
+  }
+
+  _update() async {
+    if (_formKey.currentState!.validate()) {
+      // api call
+      var res = await ItemUnitController.update(
+          id.toString(),
+          _titleController.text,
+          _descriptionController.text.trim().isEmpty
+              ? null
+              : _descriptionController.text.trim());
+
+      if (res["statusCode"] == 200) {
+        _formKey.currentState!.reset();
+        _show(res["detail"]);
+      } else if (res["statusCode"] == 422) {
+        _showNotification(res["detail"]);
+      } else if (res["statusCode"] == 401) {
+        NavigationService().routeTo("", args: res["detail"]);
+      } else {
+        setState(() {
+          errorText = res["detail"];
+          _titleError = true;
+        });
+      }
     }
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _addressController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -47,127 +133,87 @@ class _AddUnitTypeState extends State<AddUnitType> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF004096).withOpacity(0.9),
+        backgroundColor: const Color(0xFF004096).withOpacity(0.9),
         centerTitle: true,
-        title: Text('Add Unit Type'),
+        title: Text((op == 0) ? 'Add Item Unit' : 'Update Item Unit'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    errorText: _titleError ? errorText : null,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter a Title';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _descriptionController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a name';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: _addressController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: 'Address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an address';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: _submitForm,
-                    child: Material(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomLeft: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          )
-                      ),
-                      child: Container(height: 38,width: 200,
-                        child: Center(
-                          child: Text('Add',style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.black.withOpacity(0.8)
-                          ),),
+                SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    if (op == 0) {
+                      _add();
+                    } else {
+                      _update();
+                    }
+                  },
+                  child: Material(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: Container(
+                      height: 38,
+                      width: 200,
+                      child: Center(
+                        child: Text(
+                          (op == 0) ? 'Add' : 'Update',
+                          style: TextStyle(fontSize: 14, color: Colors.white),
                         ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomLeft: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          ),
                       ),
-
+                      decoration: BoxDecoration(
+                        color: Color(0xFF004096).withOpacity(0.9),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: (){
-                      _showNotification('Supplier updated successfully');
-                    },
-                    child: Material(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomRight: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          )
-                      ),
-                      child: Container(height: 38,width: 200,
-                        child: Center(
-                          child: Text('Update',style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white
-                          ),),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF004096).withOpacity(0.9),
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.0), // Specify the desired radius for the top left corner
-                            bottomRight: Radius.circular(10.0), // Specify the desired radius for the bottom right corner
-                            // You can adjust other corners as needed
-                          ),
-                      ),
-
-                      ),
+                ),
+                SizedBox(height: 20),
+                if (_notification != null)
+                  Text(
+                    _notification!,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-
-                ],
-              ),
-              SizedBox(height: 20),
-              if (_notification != null)
-                Text(
-                  _notification!,
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
